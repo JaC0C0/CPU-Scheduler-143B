@@ -1,91 +1,91 @@
 #include "scanner.h"
 
 //Reads files and places them in a vector to be further processed
-class Scanner
+//class Scanner
+//{
+//public:
+std::vector<std::string> cmdVector;
+
+void Scanner::Reader(std::string fileName)
 {
-public:
-	std::vector<std::string> cmdVector;
+	std::ifstream cmdfile(fileName);
+	std::string cmdString;
 
-	void Reader(std::string fileName)
+	if (cmdfile.is_open())
 	{
-		std::ifstream cmdfile(fileName);
-		std::string cmdString;
-
-		if (cmdfile.is_open())
+		while (cmdfile.peek() != EOF)
 		{
-			while (cmdfile.peek() != EOF)
-			{
-				std::getline(cmdfile, cmdString);
-				cmdVector.push_back(cmdString);
-			}
+			std::getline(cmdfile, cmdString);
+			cmdVector.push_back(cmdString);
+		}
 
-		}
-		else
-		{
-			std::cout << "Unable to open file." << std::endl;
-		}
-		//for (int i = 0; i < 2; i++)
-		//{
-		//	std::cout << cmdVector[i] << std::endl;
-		//}
-		//std::cin.get();
 	}
-
-	void CmdProcessor()
+	else
 	{
-		for (int i = 0; i < cmdVector.size(); i++)
-		{
-			std::string cmd = cmdVector[i];
-			std::istringstream iss(cmd);
-			std::vector<std::string> tokens(std::istream_iterator<std::string>{iss},
-				std::istream_iterator<std::string>());
-			int cmdType = tokens.size();
+		std::cout << "Unable to open file." << std::endl;
+	}
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	std::cout << cmdVector[i] << std::endl;
+	//}
+	//std::cin.get();
+}
 
-			switch (cmdType)	//Filler functions currently. Remind self to add functionality
-			{
-				case 1 : 
-					if (tokens[0] == "init")
-					{
-						std::cout << "Init Called" << std::endl;
-					}
-					else if (tokens[0] == "to")
-					{
-						std::cout << "to called" << std::endl;
-					}
-					else
-					{
-						std::cout << "1 tokens, but not init or to, something fukd up" << std::endl;
-					}
-					break;
-				case 2 :
-					if (tokens[0] == "de")
-					{
-						std::cout << "cr called" << std::endl;
-					}
-					else
-					{
-						std::cout << "2 tokens, but not de, something fukd up" << std::endl;
-					}
-					break;
-				case 3 :
-					if (tokens[0] == "cr")
-					{
-						std::cout << "cr called" << std::endl;
-					}
-					else if (tokens[0] == "req")
-					{
-						std::cout << "req called" << std::endl;
-					}
-					else if (tokens[0] == "rel")
-					{
-						std::cout << "rel called" << std::endl;
-					}
-					else
-					{
-						std::cout << "3 tokens, but not cr,req,rel, something fukd up" << std::endl;
-					}
-					break;
-			}
+void Scanner::CmdProcessor()
+{
+	for (int i = 0; i < cmdVector.size(); i++)
+	{
+		std::string cmd = cmdVector[i];
+		std::istringstream iss(cmd);
+		std::vector<std::string> tokens(std::istream_iterator<std::string>{iss},
+			std::istream_iterator<std::string>());
+		int cmdType = tokens.size();
+
+		switch (cmdType)	//Filler functions currently. Remind self to add functionality
+		{
+			case 1 : 
+				if (tokens[0] == "init")
+				{
+					std::cout << "Init Called" << std::endl;
+				}
+				else if (tokens[0] == "to")
+				{
+					std::cout << "to called" << std::endl;
+				}
+				else
+				{
+					std::cout << "1 tokens, but not init or to, something fukd up" << std::endl;
+				}
+				break;
+			case 2 :
+				if (tokens[0] == "de")
+				{
+					std::cout << "cr called" << std::endl;
+				}
+				else
+				{
+					std::cout << "2 tokens, but not de, something fukd up" << std::endl;
+				}
+				break;
+			case 3 :
+				if (tokens[0] == "cr")
+				{
+					std::cout << "cr called" << std::endl;
+				}
+				else if (tokens[0] == "req")
+				{
+					std::cout << "req called" << std::endl;
+				}
+				else if (tokens[0] == "rel")
+				{
+					std::cout << "rel called" << std::endl;
+				}
+				else
+				{
+					std::cout << "3 tokens, but not cr,req,rel, something fukd up" << std::endl;
+				}
+				break;
 		}
 	}
-};
+}
+//};

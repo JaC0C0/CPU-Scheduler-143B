@@ -1,15 +1,18 @@
 #include "rcb.h"
 
-class RCB
+//Constructor
+RCB::RCB(int rID, int resources)
 {
-	//std::vector<PCB> waitingList;;
-	bool Request(int rID)
-	{
-		return false;
-	}
+	this->rID = rID;
+	this->resources = resources;
+}
 
-	void Release(int rID)
-	{
-		return;
-	}
-};
+bool RCB::Request(int rID)
+{
+	return false;
+}
+
+void RCB::Release(int rID)
+{
+	return;
+}

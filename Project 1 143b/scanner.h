@@ -5,13 +5,13 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "scanner.h"
 #include <vector>
 #include <sstream>
 #include <iterator>
 
 class Scanner
 {
+public:
 	void Reader(std::string fileName);
 	void CmdProcessor();
 };
