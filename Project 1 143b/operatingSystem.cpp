@@ -1,6 +1,6 @@
 #include "operatingSystem.h"
 
-class OperatingSystem
-{
-	std::vector<
-};
+//class OperatingSystem
+//{
+//	std::vector<
+//};
