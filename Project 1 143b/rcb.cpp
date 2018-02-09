@@ -7,12 +7,12 @@ RCB::RCB(int rID, int resources)
 	this->resources = resources;
 }
 
-bool RCB::Request(int rID)
-{
-	return false;
-}
-
-void RCB::Release(int rID)
-{
-	return;
-}
+//bool RCB::Request(int rID)
+//{
+//	return false;
+//}
+//
+//void RCB::Release(int rID)
+//{
+//	return;
+//}
