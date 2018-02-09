@@ -2,7 +2,7 @@
 #include "status.h"
 
 //Constructor
-PCB::PCB(int pID, std::vector<int> otherResources, std::pair<pStatus, ReadyList> status)
+PCB::PCB(int pID, std::vector<int> otherResources, std::pair<pStatus, ReadyList*> status)
 {
 	this->pID = pID;
 	this->otherResources = otherResources;

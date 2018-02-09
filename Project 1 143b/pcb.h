@@ -7,12 +7,12 @@
 
 struct PCB
 {
-	PCB(int pID, std::vector<int> otherResources, std::pair<pStatus, ReadyList> status);
+	PCB(int pID, std::vector<int> otherResources, std::pair<pStatus, ReadyList*> status);
 
 	int pID;
 	std::vector<int> otherResources;
-	ReadyList creationTree;
-	std::pair<pStatus, ReadyList> status = std::make_pair(READY, creationTree);
+	//ReadyList creationTree;
+	std::pair<pStatus, ReadyList*> status;
 
 	bool operator==(const PCB &p) const;
 };
