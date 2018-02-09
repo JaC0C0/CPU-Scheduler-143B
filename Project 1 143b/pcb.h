@@ -11,8 +11,7 @@ struct PCB
 	PCB(int pID, std::vector<int> otherResources, std::pair<pStatus, std::list<PCB>*> status);
 
 	int pID;
-	std::vector<int> otherResources;
-	//ReadyList creationTree;
+	std::list<RCB> otherResources;
 	std::pair<pStatus, std::list<PCB>*> status;
 
 	bool operator==(const PCB &p) const;
