@@ -9,15 +9,16 @@
 class RCB
 {
 public:
-	//NOT NEEDED? PROBABLY DONE IN SCHEDULER
 	RCB(int rID, int resources);
-	////Requests resource from respective ID. Returns boolean for QoL.
-	//bool Request(int rID);
-	////Release process and respective resources with ID
-	//void Release(int rID);
+	int getRID();
+	int getResources();
+	void incrementResources(int incr);
+	void decreaseResources(int decr);
+	rStatus getStatus();
+	void setStatus(rStatus status);
+	std::list<PCB> getWaitingList();
 private:
 	int rID, resources;
-	//rStatus status; Not sure if i need this?
 	rStatus status;
 	std::list<PCB> waitingList;
 };

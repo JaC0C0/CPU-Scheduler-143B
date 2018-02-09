@@ -1,8 +1,9 @@
 #include "pcb.h"
 #include "status.h"
+#include "rcb.h"
 
 //Constructor
-PCB::PCB(int pID, std::vector<int> otherResources, std::pair<pStatus, std::list<PCB>*> status)
+PCB::PCB(int pID, std::list<RCB> otherResources, std::pair<pStatus, std::list<PCB>*> status)
 {
 	this->pID = pID;
 	this->otherResources = otherResources;

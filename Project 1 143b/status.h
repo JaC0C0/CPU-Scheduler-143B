@@ -12,6 +12,6 @@ enum pStatus {
 //Resource status enum
 enum rStatus {
 	FREE,
-	ALLOCATED
+	BLOCKED
 };
 #endif //STATUS_H

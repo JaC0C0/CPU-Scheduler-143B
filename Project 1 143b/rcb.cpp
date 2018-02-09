@@ -7,12 +7,38 @@ RCB::RCB(int rID, int resources)
 	this->resources = resources;
 }
 
-//bool RCB::Request(int rID)
-//{
-//	return false;
-//}
-//
-//void RCB::Release(int rID)
-//{
-//	return;
-//}
+//Getters and Setters
+int RCB::getRID()
+{
+	return rID;
+}
+
+int RCB::getResources()
+{
+	return resources;
+}
+
+void RCB::incrementResources(int incr)
+{
+	this->resources += incr;
+}
+
+void RCB::decreaseResources(int decr)
+{
+	this->resources -= decr;
+}
+
+rStatus RCB::getStatus()
+{
+	return this->status;
+}
+
+void RCB::setStatus(rStatus status)
+{
+	this->status = status;
+}
+
+std::list<PCB> RCB::getWaitingList()
+{
+	return waitingList;
+}
