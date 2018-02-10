@@ -8,13 +8,6 @@
 
 struct PCB
 {
-	//PCB(int pID, std::list<RCB> otherResources, std::pair<pStatus, std::list<PCB>*> status)
-	//{
-	//	this->pID = pID;
-	//	this->otherResources = otherResources;
-	//	this->status = status;
-	//}
-
 	int pID;
 	std::list<RCB> otherResources;
 	std::pair<pStatus, std::list<PCB>*> status;
