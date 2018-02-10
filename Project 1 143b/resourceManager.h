@@ -11,9 +11,9 @@
 class ResourceManager {
 public:
 	//addResource() for init
-	void addResource(std::string rID, int quantity);
+	//void addResource(std::string rID, int quantity);
 	void request(std::string rID, int quantity, PCB pcb);
-	void release(std::string rID);
+	void release(std::string rID, int quantity, PCB pcb);
 private:
 	std::map<std::string, RCB> resourceMap;
 };

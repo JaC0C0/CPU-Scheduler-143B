@@ -9,9 +9,9 @@ enum pStatus {
 	RUNNING
 };
 
-//Resource status enum
-enum rStatus {
-	FREE,
-	BLOCKED
-};
+////Resource status enum
+//enum rStatus {
+//	FREE,
+//	BLOCKED
+//};
 #endif //STATUS_H
