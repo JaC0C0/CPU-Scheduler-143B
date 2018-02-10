@@ -10,7 +10,8 @@ struct PCB
 {
 	int pID;
 	std::list<RCB> otherResources;
-	std::pair<pStatus, std::list<PCB>*> status;
+	pStatus status;
+	std::list<std::shared_ptr<PCB>> readyList;
 
 	bool operator==(const PCB &p) const;
 };

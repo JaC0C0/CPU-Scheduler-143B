@@ -4,7 +4,6 @@
 #include <vector>
 #include <list>
 #include "pcb.h"
-#include "status.h"
 #include <memory>
 
 struct RCB
@@ -21,9 +20,9 @@ struct RCB
 //private:
 	bool operator==(const RCB&r) const;
 
-	int rID, resources;
-	rStatus status;
-	std::shared_ptr<std::list<PCB>> waitingList;
+	int rID;
+	std::pair<int, int> resources;
+	std::shared_ptr<std::list<std::pair<int, std::shared_ptr<PCB>>>> waitingList;
 };
 
 #endif //RCB_H
