@@ -22,7 +22,7 @@ struct RCB
 
 	int rID;
 	std::pair<int, int> resources;
-	std::shared_ptr<std::list<std::pair<int, std::shared_ptr<PCB>>>> waitingList;
+	std::shared_ptr<std::list<std::shared_ptr<PCB>>> waitingList;
 };
 
 #endif //RCB_H

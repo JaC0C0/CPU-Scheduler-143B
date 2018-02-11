@@ -11,7 +11,7 @@ struct RCB;
 
 struct PCB
 {
-	int pID, priority;
+	int pID, priority, numResources;
 	std::list<std::shared_ptr<RCB>> otherResources;
 	pStatus status;
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> list;
