@@ -24,7 +24,7 @@ void Scanner::Reader(std::string fileName)
 
 void Scanner::CmdProcessor()
 {
-	for (int i = 0; i < cmdVector.size(); i++)
+	for (size_t i = 0; i < cmdVector.size(); i++)
 	{
 		std::string cmd = cmdVector[i];
 		std::istringstream iss(cmd);
@@ -62,7 +62,7 @@ void Scanner::CmdProcessor()
 				if (tokens[0] == "cr")
 				{
 					std::cout << "cr called" << std::endl;
-					if (tokens[1].length != 1)
+					if (tokens[1].size() != 1)
 					{
 						std::cout << "Error: Process name too long" << std::endl;
 					}
