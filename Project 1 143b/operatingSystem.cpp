@@ -52,7 +52,7 @@ void OperatingSystem::release(std::string rID, int quantity, PCB pcb)
 
 void OperatingSystem::scheduler()
 {
-	for (int i = 0; i < priorityQueues.size(); i++)
+	for (size_t i = 0; i < priorityQueues.size(); i++)
 	{
 		if (!priorityQueues[i]->empty())
 		{
@@ -72,7 +72,7 @@ void OperatingSystem::scheduler()
 			{
 				//Setting flag for earlier breaking. Reduce overhead.
 				bool foundFlag = false;
-				for (int j = i; j < priorityQueues.size(); j++)
+				for (size_t j = i; j < priorityQueues.size(); j++)
 				{
 					if (foundFlag)
 					{
@@ -100,7 +100,7 @@ void OperatingSystem::scheduler()
 
 bool OperatingSystem::isRunning()
 {
-	for (int i = 0; i < priorityQueues.size(); i++)
+	for (size_t i = 0; i < priorityQueues.size(); i++)
 	{
 		if (!priorityQueues[i]->empty())
 		{
