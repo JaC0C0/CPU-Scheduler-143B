@@ -8,6 +8,7 @@
 #include "pcb.h"
 #include <iostream>
 #include <vector>
+#include "scanner.h"
 
 class OperatingSystem {
 public:
@@ -26,6 +27,7 @@ public:
 private:
 	std::map<std::string, std::shared_ptr<RCB>> resourceMap;
 	std::vector<std::shared_ptr<std::list<std::shared_ptr<PCB>>>> priorityQueues;
+	Scanner scanner;
 };
 
 #endif //OPERATINGSYSTEM_H

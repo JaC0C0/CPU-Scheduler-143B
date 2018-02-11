@@ -14,6 +14,7 @@ class Scanner
 public:
 	void Reader(std::string fileName);
 	void CmdProcessor();
+	std::vector<std::string> cmdVector;
 };
 
 #endif //SCANNER_H

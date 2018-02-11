@@ -1,10 +1,6 @@
 #include "scanner.h"
 
 //Reads files and places them in a vector to be further processed
-//class Scanner
-//{
-//public:
-std::vector<std::string> cmdVector;
 
 void Scanner::Reader(std::string fileName)
 {
@@ -24,12 +20,7 @@ void Scanner::Reader(std::string fileName)
 	{
 		std::cout << "Unable to open file." << std::endl;
 	}
-	//for (int i = 0; i < 2; i++)
-	//{
-	//	std::cout << cmdVector[i] << std::endl;
-	//}
-	//std::cin.get();
-}
+};
 
 void Scanner::CmdProcessor()
 {
@@ -71,6 +62,10 @@ void Scanner::CmdProcessor()
 				if (tokens[0] == "cr")
 				{
 					std::cout << "cr called" << std::endl;
+					if (tokens[1].length != 1)
+					{
+						std::cout << "Error: Process name too long" << std::endl;
+					}
 				}
 				else if (tokens[0] == "req")
 				{
@@ -87,5 +82,4 @@ void Scanner::CmdProcessor()
 				break;
 		}
 	}
-}
-//};
+};
