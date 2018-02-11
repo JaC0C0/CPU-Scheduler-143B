@@ -27,6 +27,7 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 		resourceMap.at(rID)->waitingList->push_back(pcb);
 
 	}
+	this->scheduler();
 };
 
 void OperatingSystem::release(std::string rID, int quantity, PCB pcb)
@@ -48,6 +49,7 @@ void OperatingSystem::release(std::string rID, int quantity, PCB pcb)
 		newlyReleased->list = priorityQueues[newlyReleased->priority];
 		newlyReleased->status = READY;
 	}
+	this->scheduler();
 };
 
 void OperatingSystem::scheduler()
@@ -67,11 +69,11 @@ void OperatingSystem::scheduler()
 				priorityQueues[i]->front()->status = RUNNING;
 				return;
 			}
-			//if the wrong PCB is running
+			//if the wrong PCB is running. Preemption
 			else if (priorityQueues[i]->front()->status != RUNNING && this->isRunning())
 			{
 				//Setting flag for earlier breaking. Reduce overhead.
-				bool foundFlag = false;
+				/*bool foundFlag = false;
 				for (size_t j = i; j < priorityQueues.size(); j++)
 				{
 					if (foundFlag)
@@ -90,7 +92,8 @@ void OperatingSystem::scheduler()
 							}
 						}
 					}
-				}
+				}*/
+				this->getRunning()->status = READY;
 				priorityQueues[i]->front()->status = RUNNING;
 				return;
 			}
@@ -114,4 +117,45 @@ bool OperatingSystem::isRunning()
 		}
 	}
 	return false;
+}
+
+std::shared_ptr<PCB> OperatingSystem::getRunning()
+{
+	for (size_t i = 0; i < priorityQueues.size(); i++)
+	{
+		if (!priorityQueues[i]->empty())
+		{
+			for (std::shared_ptr<PCB> pcb : *priorityQueues[i])
+			{
+				if (pcb->status == RUNNING)
+				{
+					return pcb;
+				}
+			}
+		}
+	}
+}
+void OperatingSystem::timeOut()
+{
+	if (isRunning())
+	{
+		for (size_t i = 0; i < priorityQueues.size(); i++)
+		{
+			if (!priorityQueues[i]->empty())
+			{
+				for (std::shared_ptr<PCB> pcb : *priorityQueues[i])
+				{
+					if (pcb->status == RUNNING)
+					{
+						//std::shared_ptr<PCB> tempPCB = pcb;
+						pcb->status = READY;
+						priorityQueues[i]->remove(pcb);
+						priorityQueues[i]->push_back(pcb);
+						break;
+					}
+				}
+			}
+		}
+	}
+	this->scheduler();
 }

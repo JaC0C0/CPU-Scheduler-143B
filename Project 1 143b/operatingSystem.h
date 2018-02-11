@@ -18,6 +18,9 @@ public:
 	void release(std::string rID, int quantity, PCB pcb);
 	void scheduler();
 	bool isRunning();
+	std::shared_ptr<PCB> getRunning();
+	void timeOut();
+
 private:
 	std::map<std::string, std::shared_ptr<RCB>> resourceMap;
 	std::vector<std::shared_ptr<std::list<std::shared_ptr<PCB>>>> priorityQueues;
