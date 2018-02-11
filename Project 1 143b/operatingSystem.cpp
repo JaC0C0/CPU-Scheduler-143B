@@ -52,11 +52,66 @@ void OperatingSystem::release(std::string rID, int quantity, PCB pcb)
 
 void OperatingSystem::scheduler()
 {
-	for (int i; i < priorityQueues.size(); i++)
+	for (int i = 0; i < priorityQueues.size(); i++)
 	{
 		if (!priorityQueues[i]->empty())
 		{
-			if (priorityQueues[i]->front()->)
+			//If the right PCB is running
+			if (priorityQueues[i]->front()->status == RUNNING)
+			{
+				return;
+			}
+			//If nothing is running but there is a PCB
+			else if (priorityQueues[i]->front()->status != RUNNING && !this->isRunning())
+			{
+				priorityQueues[i]->front()->status = RUNNING;
+				return;
+			}
+			//if the wrong PCB is running
+			else if (priorityQueues[i]->front()->status != RUNNING && this->isRunning())
+			{
+				//Setting flag for earlier breaking. Reduce overhead.
+				bool foundFlag = false;
+				for (int j = i; j < priorityQueues.size(); j++)
+				{
+					if (foundFlag)
+					{
+						break;
+					}
+					else if (!priorityQueues[j]->empty())
+					{
+						for (std::shared_ptr<PCB> pcb : *priorityQueues[j])
+						{
+							if (pcb->status == RUNNING)
+							{
+								pcb->status = READY;
+								foundFlag = true;
+								break;
+							}
+						}
+					}
+				}
+				priorityQueues[i]->front()->status = RUNNING;
+				return;
+			}
 		}
 	}
+}
+
+bool OperatingSystem::isRunning()
+{
+	for (int i = 0; i < priorityQueues.size(); i++)
+	{
+		if (!priorityQueues[i]->empty())
+		{
+			for (std::shared_ptr<PCB> pcb : *priorityQueues[i])
+			{
+				if (pcb->status == RUNNING)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
