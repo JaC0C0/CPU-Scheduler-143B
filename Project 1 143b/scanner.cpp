@@ -55,7 +55,7 @@ void Scanner::CmdProcessor()
 				}
 				else
 				{
-					std::cout << "2 tokens, but not de, something fukd up" << std::endl;
+					std::cout << "Error: Unrecognized Command" << std::endl;
 				}
 				break;
 			case 3 :
