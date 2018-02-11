@@ -2,7 +2,7 @@
 #include "status.h"
 #include "rcb.h"
 
-PCB::PCB(char pID, int priority, int numResources, std::shared_ptr<std::list<std::shared_ptr<PCB>>> list, 
+PCB::PCB(std::string pID, int priority, int numResources, std::shared_ptr<std::list<std::shared_ptr<PCB>>> list,
 	std::shared_ptr<PCB> parent)
 {
 	this->pID = pID;

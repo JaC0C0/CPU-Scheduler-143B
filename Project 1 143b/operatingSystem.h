@@ -14,7 +14,7 @@ public:
 	//addResource() for init
 	//void addResource(std::string rID, int quantity);
 	OperatingSystem();
-	void create(char pID, int priority, int numResources);
+	void create(std::string pID, int priority, int numResources);
 	void request(std::string rID, int quantity, std::shared_ptr<PCB> pcb);
 	void release(std::string rID);
 	void scheduler();
