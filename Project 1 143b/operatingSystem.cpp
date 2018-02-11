@@ -1,5 +1,11 @@
 #include "operatingSystem.h"
 
+OperatingSystem::OperatingSystem()
+{
+	std::list<PCB> priorityQueue0, priorityQueue1, priorityQueue2;
+	this->priorityQueues = { priorityQueue0, priorityQueue1, priorityQueue2 };
+}
+
 void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB> pcb)
 {
 	if (resourceMap.at(rID)->resources.second == quantity)
