@@ -24,7 +24,7 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 		std::cout << "Resource Blocked" << std::endl;
 		pcb->list = resourceMap.at(rID)->waitingList;
 		pcb->status = BLOCKED;
-		resourceMap.at(rID)->waitingList->push_back(std::make_pair(quantity, pcb));
+		resourceMap.at(rID)->waitingList->push_back(pcb);
 
 	}
 };
