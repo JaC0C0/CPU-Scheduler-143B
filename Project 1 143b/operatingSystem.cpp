@@ -4,7 +4,9 @@ OperatingSystem::OperatingSystem()
 {
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> priorityQueue0, priorityQueue1, priorityQueue2;
 	this->priorityQueues = { priorityQueue0, priorityQueue1, priorityQueue2 };
-	this->create("init", 0, 0);
+	this->resourceMap = { { "R1", std::make_shared<RCB>(RCB(1)) },{ "R2", std::make_shared<RCB>(RCB(2)) },
+	{ "R3", std::make_shared<RCB>(RCB(3)) },{ "R4", std::make_shared<RCB>(RCB(4)) } };
+	this->create("init", 0, 0);	
 }
 
 void OperatingSystem::create(std::string pID, int priority, int numResources)
