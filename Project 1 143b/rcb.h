@@ -5,10 +5,12 @@
 #include <list>
 #include "pcb.h"
 #include <memory>
+#include <string>
 
 struct RCB
 {
 	bool operator==(const RCB&r) const;
+	RCB(int rID);
 
 	std::string rID;
 	std::pair<int, int> resources;
