@@ -14,7 +14,7 @@ struct PCB
 	int pID, priority;
 	std::list<std::shared_ptr<RCB>> otherResources;
 	pStatus status;
-	std::shared_ptr<std::list<std::shared_ptr<PCB>>> readyList;
+	std::shared_ptr<std::list<std::shared_ptr<PCB>>> list;
 
 	bool operator==(const PCB &p) const;
 };
