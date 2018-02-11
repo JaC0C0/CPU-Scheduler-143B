@@ -11,10 +11,15 @@ struct RCB;
 
 struct PCB
 {
-	int pID, priority, numResources;
+	PCB(std::string pID, int priority, int numResources, std::shared_ptr<std::list<std::shared_ptr<PCB>>>, std::shared_ptr<PCB> parent);
+	std::string pID;
+	int priority, numResources;
 	std::list<std::shared_ptr<RCB>> otherResources;
 	pStatus status;
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> list;
+	//Parent/Child Tree Element
+	std::shared_ptr<PCB> parent;
+	std::list<std::shared_ptr<PCB>> children;
 
 	bool operator==(const PCB &p) const;
 };

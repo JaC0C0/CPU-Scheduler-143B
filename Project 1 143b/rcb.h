@@ -10,7 +10,7 @@ struct RCB
 {
 	bool operator==(const RCB&r) const;
 
-	int rID;
+	std::string rID;
 	std::pair<int, int> resources;
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> waitingList;
 };

@@ -4,6 +4,14 @@ OperatingSystem::OperatingSystem()
 {
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> priorityQueue0, priorityQueue1, priorityQueue2;
 	this->priorityQueues = { priorityQueue0, priorityQueue1, priorityQueue2 };
+	this->create("init", 0, 0);
+}
+
+void OperatingSystem::create(std::string pID, int priority, int numResources)
+{
+	std::shared_ptr<PCB> parent = this->getRunning();
+	std::shared_ptr<PCB> newPCB = std::make_shared<PCB>(PCB(pID, priority, numResources, priorityQueues[priority], parent));
+	priorityQueues[priority]->push_back(std::shared_ptr<PCB>(newPCB));
 }
 
 void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB> pcb)
@@ -13,7 +21,6 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 	if (resourceMap.at(rID)->resources.second == quantity)
 	{
 		resourceMap.at(rID)->resources.second = 0;
-		//resourceMap.at(rID).status = rStatus::BLOCKED;
 	}
 	else if (resourceMap.at(rID)->resources.second > quantity)
 	{
@@ -30,10 +37,10 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 	this->scheduler();
 };
 
-void OperatingSystem::release(std::string rID, int quantity, PCB pcb)
+void OperatingSystem::release(std::string rID)
 {
-	RCB rcb = *resourceMap.at(rID);
-	rcb.resources.second += quantity;
+	RCB& rcb = *resourceMap.at(rID);
+	rcb.resources.second += this->getRunning()->numResources;
 	//Check for other waiting processes and if enough resources, request more resources
 	while (!rcb.waitingList->empty() && rcb.resources.first >= rcb.waitingList->front()->numResources)
 	{
@@ -135,6 +142,7 @@ std::shared_ptr<PCB> OperatingSystem::getRunning()
 		}
 	}
 }
+
 void OperatingSystem::timeOut()
 {
 	if (isRunning())
@@ -158,4 +166,22 @@ void OperatingSystem::timeOut()
 		}
 	}
 	this->scheduler();
+}
+
+void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
+{
+	if (!pcb->children.empty())
+	{
+		for (std::shared_ptr<PCB> iterPCB : pcb->children)
+		{
+			this->killProcess(iterPCB);
+		}
+	}
+	if (!pcb->otherResources.empty())
+	{
+		for (std::shared_ptr<RCB> rcb : pcb->otherResources)
+		{
+			this->release(rcb->rID);
+		}
+	}
 }

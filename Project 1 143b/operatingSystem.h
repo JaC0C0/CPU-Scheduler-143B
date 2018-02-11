@@ -14,12 +14,14 @@ public:
 	//addResource() for init
 	//void addResource(std::string rID, int quantity);
 	OperatingSystem();
+	void create(char pID, int priority, int numResources);
 	void request(std::string rID, int quantity, std::shared_ptr<PCB> pcb);
-	void release(std::string rID, int quantity, PCB pcb);
+	void release(std::string rID);
 	void scheduler();
 	bool isRunning();
 	std::shared_ptr<PCB> getRunning();
 	void timeOut();
+	void killProcess(std::shared_ptr<PCB>);
 
 private:
 	std::map<std::string, std::shared_ptr<RCB>> resourceMap;
