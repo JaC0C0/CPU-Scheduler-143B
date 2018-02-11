@@ -79,27 +79,6 @@ void OperatingSystem::scheduler()
 			//if the wrong PCB is running. Preemption
 			else if (priorityQueues[i]->front()->status != RUNNING && this->isRunning())
 			{
-				//Setting flag for earlier breaking. Reduce overhead.
-				/*bool foundFlag = false;
-				for (size_t j = i; j < priorityQueues.size(); j++)
-				{
-					if (foundFlag)
-					{
-						break;
-					}
-					else if (!priorityQueues[j]->empty())
-					{
-						for (std::shared_ptr<PCB> pcb : *priorityQueues[j])
-						{
-							if (pcb->status == RUNNING)
-							{
-								pcb->status = READY;
-								foundFlag = true;
-								break;
-							}
-						}
-					}
-				}*/
 				this->getRunning()->status = READY;
 				priorityQueues[i]->front()->status = RUNNING;
 				return;
