@@ -5,13 +5,16 @@
 #include <list>
 #include "status.h"
 #include "readylist.h"
+#include <memory>
+
+struct RCB;
 
 struct PCB
 {
-	int pID;
-	std::list<RCB> otherResources;
+	int pID, priority;
+	std::list<std::shared_ptr<RCB>> otherResources;
 	pStatus status;
-	std::list<std::shared_ptr<PCB>> readyList;
+	std::shared_ptr<std::list<std::shared_ptr<PCB>>> readyList;
 
 	bool operator==(const PCB &p) const;
 };
