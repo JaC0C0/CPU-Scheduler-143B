@@ -25,7 +25,7 @@ public:
 	bool checkRCB(std::list<std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>>> list, std::string rID);
 	void timeOut();
 	void killProcess(std::shared_ptr<PCB>);
-	void processState();
+	void processState(std::ostream& textoutput);
 	bool checkTermination();
 private:
 	std::map<std::string, std::shared_ptr<RCB>> resourceMap;

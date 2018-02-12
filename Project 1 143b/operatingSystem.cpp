@@ -72,6 +72,7 @@ void OperatingSystem::release(std::string rID, int quantity)
 		for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : this->getRunning()->otherResources)
 		{
 			this->getRunning()->otherResources.remove(rcb);
+			if (rcb == *this->getRunning()->otherResources.end()) { break; }
 		}
 	}
 	//Check for other waiting processes and if enough resources, request more resources
@@ -285,11 +286,12 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 	this->scheduler();
 }
 
-void OperatingSystem::processState()
+void OperatingSystem::processState(std::ostream& textoutput)
 {
 	if (this->isRunning())
 	{
 		std::cout << "Process " << this->getRunning()->pID << " is running" << std::endl;
+		textoutput << this->getRunning()->pID << " ";
 	}
 }
 
