@@ -19,7 +19,7 @@ public:
 	void Reader(std::string fileName);
 	void CmdProcessor(std::shared_ptr<OperatingSystem> os);
 	//Function definition comes from https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
-	bool isNumber(const std::string& s);
+	bool is_number(const std::string& s);
 private:
 	std::vector<std::string> cmdVector;
 	bool terminate;

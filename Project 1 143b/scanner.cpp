@@ -73,7 +73,7 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				if (tokens[0] == "cr")
 				{
 					//std::cout << "cr called" << std::endl;
-					if (tokens[1].size() != 1 || !is_number(tokens[2]))
+					if (tokens[1].size() != 1 || !this->is_number(tokens[2]))
 					{
 						std::cout << "Error 3: Invalid Process Command" << std::endl;
 					}
@@ -99,7 +99,7 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 					//std::cout << "rel called" << std::endl;
 					if (is_number(tokens[2]))
 					{
-						os->release(tokens[1], std::stoi(tokens[2]), os->getRunning());
+						os->release(tokens[1], std::stoi(tokens[2]));
 					}
 					else
 					{
@@ -108,7 +108,7 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				}
 				else
 				{
-					std::cout << "3 tokens, but not cr,req,rel, something fukd up" << std::endl;
+					std::cout << "Error 3: Invalid Command" << std::endl;
 				}
 				break;
 		}
@@ -116,7 +116,7 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 };
 
 //Function definition comes from https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
-bool is_number(const std::string& s)
+bool Scanner::is_number(const std::string& s)
 {
 	return !s.empty() && std::find_if(s.begin(),
 		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();

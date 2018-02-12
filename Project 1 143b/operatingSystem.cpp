@@ -58,9 +58,9 @@ void OperatingSystem::release(std::string rID, int quantity)
 	//If process still contains resource
 	if (this->returnRCB(this->getRunning()->otherResources, rID)->first == 0)
 	{
-		for (auto rcb : this->returnRCB(this->getRunning()->otherResources))
+		for (auto rcb : this->getRunning()->otherResources)
 		{
-
+			this->getRunning()->otherResources.remove(rcb);
 		}
 	}
 	//Check for other waiting processes and if enough resources, request more resources
