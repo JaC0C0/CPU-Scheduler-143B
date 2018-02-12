@@ -8,6 +8,7 @@ void OperatingSystem::initOS()
 	this->resourceMap = { { "R1", std::make_shared<RCB>(RCB(1)) },{ "R2", std::make_shared<RCB>(RCB(2)) },
 	{ "R3", std::make_shared<RCB>(RCB(3)) },{ "R4", std::make_shared<RCB>(RCB(4)) } };
 	this->create("init", 0, 0);	
+	this->scheduler();
 }
 
 void OperatingSystem::create(std::string pID, int priority, int numResources)
@@ -15,6 +16,7 @@ void OperatingSystem::create(std::string pID, int priority, int numResources)
 	std::shared_ptr<PCB> parent = this->getRunning();
 	std::shared_ptr<PCB> newPCB = std::make_shared<PCB>(PCB(pID, priority, numResources, priorityQueues[priority], parent));
 	priorityQueues[priority]->push_back(std::shared_ptr<PCB>(newPCB));
+	this->scheduler();
 }
 
 void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB> pcb)
@@ -83,7 +85,7 @@ void OperatingSystem::release(std::string rID, int quantity)
 
 void OperatingSystem::scheduler()
 {
-	for (size_t i = 0; i < priorityQueues.size(); i++)
+	for (size_t i = 2; i == 0; i--)
 	{
 		if (!priorityQueues[i]->empty())
 		{
@@ -232,6 +234,7 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 			this->release(rcb->second->rID, rcb->first);
 		}
 	}
+	this->scheduler();
 }
 
 void OperatingSystem::processState()
