@@ -22,28 +22,33 @@ void OperatingSystem::create(std::string pID, int priority, int numResources)
 void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB> pcb)
 {
 	//Sets the # of resources the 
-	//pcb->numResources = quantity;
+	pcb->reqResources += quantity;
 	std::shared_ptr<RCB> rcb = resourceMap.at(rID);
 	//Check if RCB already is requested and add to that RCB request
 	if (this->checkRCB(pcb->otherResources, rID))
 	{
 		this->returnRCB(pcb->otherResources, rID)->first += quantity;
 	}
+	//If resources requested == resources available
 	else if (rcb->resources.second == quantity)
 	{
 		rcb->resources.second = 0;
-		pcb->otherResources.push_back(std::make_shared<std::pair<int, std::shared_ptr<RCB>>>(std::make_pair(quantity, rcb)));
+		pcb->otherResources.push_back(std::make_shared<std::pair<int, std::shared_ptr<RCB>>>
+			(std::make_pair(quantity, rcb)));
 	}
+	//More resources available than requested
 	else if (rcb->resources.second > quantity)
 	{
 		rcb->resources.second -= quantity;
 		rcb->resources.second = 0;
-		pcb->otherResources.push_back(std::make_shared<std::pair<int, std::shared_ptr<RCB>>>(std::make_pair(quantity, rcb)));
+		pcb->otherResources.push_back(std::make_shared<std::pair<int, std::shared_ptr<RCB>>>
+			(std::make_pair(quantity, rcb)));
 	}
 	else
 	{
 		std::cout << "Resource " << rID << " is blocked" << std::endl;
 		pcb->list = resourceMap.at(rID)->waitingList;
+		priorityQueues[pcb->priority]->remove(pcb);
 		pcb->reqResources = quantity;
 		pcb->status = BLOCKED;
 		rcb->waitingList->push_back(pcb);
@@ -60,7 +65,7 @@ void OperatingSystem::release(std::string rID, int quantity)
 	//If process still contains resource
 	if (this->returnRCB(this->getRunning()->otherResources, rID)->first == 0)
 	{
-		for (auto rcb : this->getRunning()->otherResources)
+		for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : this->getRunning()->otherResources)
 		{
 			this->getRunning()->otherResources.remove(rcb);
 		}
@@ -85,7 +90,7 @@ void OperatingSystem::release(std::string rID, int quantity)
 
 void OperatingSystem::scheduler()
 {
-	for (size_t i = 2; i == 0; i--)
+	for (size_t i = 2; i >= 0; i--)
 	{
 		if (!priorityQueues[i]->empty())
 		{

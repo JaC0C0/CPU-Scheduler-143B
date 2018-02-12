@@ -23,6 +23,7 @@ void Scanner::Reader(std::string fileName)
 
 void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 {
+	os->processState();
 	for (size_t i = 0; i < cmdVector.size(); i++)
 	{
 		this->terminate = false;
@@ -112,6 +113,7 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				}
 				break;
 		}
+		os->processState();
 	}
 };
 
