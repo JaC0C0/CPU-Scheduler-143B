@@ -59,6 +59,10 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 void OperatingSystem::release(std::string rID, int quantity)
 {
 	RCB& rcb = *resourceMap.at(rID);
+	if (rcb.resources.first == rcb.resources.second || this->returnRCB(this->getRunning()->otherResources, rID) == nullptr)
+	{
+		return;
+	}
 	//rcb.resources.second += this->getRunning()->numResources;
 	rcb.resources.second += quantity;
 	this->returnRCB(this->getRunning()->otherResources, rID)->first -= quantity;
@@ -93,6 +97,10 @@ void OperatingSystem::release(std::string rID, std::string pID)
 {
 	std::shared_ptr<PCB> pcb = this->returnProcess(pID);
 	std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb = this->returnRCB(pcb->otherResources, rID);
+	if (rcb->second->resources.first == rcb->second->resources.second || this->returnRCB(this->getRunning()->otherResources, rID) == nullptr)
+	{
+		return;
+	}
 	//rcb.resources.second += this->getRunning()->numResources;
 	rcb->second->resources.second += pcb->reqResources;
 	this->returnRCB(pcb->otherResources, rID)->first -= pcb->reqResources;
@@ -273,6 +281,7 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 			if (pcb->otherResources.size() == 0) { break; }
 		}
 	}
+	this->priorityQueues[pcb->priority]->remove(pcb);
 	this->scheduler();
 }
 
