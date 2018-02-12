@@ -88,6 +88,39 @@ void OperatingSystem::release(std::string rID, int quantity)
 	this->scheduler();
 };
 
+//Specifically for killing kids
+void OperatingSystem::release(std::string rID, std::string pID)
+{
+	RCB& rcb = *resourceMap.at(rID);
+	std::shared_ptr<PCB> pcb = this->returnProcess(pID);
+	//rcb.resources.second += this->getRunning()->numResources;
+	rcb.resources.second += pcb->reqResources;
+	this->returnRCB(this->getRunning()->otherResources, rID)->first -= pcb->reqResources;
+	//If process still contains resource
+	if (this->returnRCB(this->getRunning()->otherResources, rID)->first == 0)
+	{
+		for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : pcb->otherResources)
+		{
+			pcb->otherResources.remove(rcb);
+		}
+	}
+	//Check for other waiting processes and if enough resources, request more resources
+	while (!rcb.waitingList->empty() && rcb.resources.first >= rcb.waitingList->front()->reqResources)
+	{
+		//reqResources is the amount of resources requested by the process that is waiting
+		int reqResources = rcb.waitingList->front()->reqResources;
+
+		std::shared_ptr<PCB> newlyReleased = rcb.waitingList->front();
+		//Remove ptr to PCB from the front of the waitingList to the respective priority queue and reserves respective resources
+		rcb.resources.second -= reqResources;
+		rcb.waitingList->pop_front();
+		priorityQueues[newlyReleased->priority]->push_front(newlyReleased);
+		//Change status of PCB to ready and next in line for running
+		newlyReleased->list = priorityQueues[newlyReleased->priority];
+		newlyReleased->status = READY;
+	}
+};
+
 void OperatingSystem::scheduler()
 {
 	for (size_t i = 2; i >= 0; i--)
@@ -236,7 +269,7 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 	{
 		for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : pcb->otherResources)
 		{
-			this->release(rcb->second->rID, rcb->first);
+			this->release(rcb->second->rID, pcb->pID);
 		}
 	}
 	this->scheduler();

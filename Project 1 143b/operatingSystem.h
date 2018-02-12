@@ -15,6 +15,7 @@ public:
 	void create(std::string pID, int priority, int numResources);
 	void request(std::string rID, int quantity, std::shared_ptr<PCB> pcb);
 	void release(std::string rID, int quantity);
+	void release(std::string rID, std::string pID);
 	void scheduler();
 	bool isRunning();
 	std::shared_ptr<PCB> getRunning();
