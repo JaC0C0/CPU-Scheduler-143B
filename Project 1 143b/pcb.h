@@ -11,7 +11,7 @@ struct RCB;
 
 struct PCB
 {
-	PCB(std::string pID, int priority, int numResources, std::shared_ptr<std::list<std::shared_ptr<PCB>>> list, 
+	PCB(std::string pID, int priority, int reqResources, std::shared_ptr<std::list<std::shared_ptr<PCB>>> list, 
 		std::shared_ptr<PCB> parent);
 	std::string pID;
 	int priority, reqResources;
