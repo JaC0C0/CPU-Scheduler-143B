@@ -14,7 +14,6 @@ void Scanner::Reader(std::string fileName)
 			std::getline(cmdfile, cmdString);
 			cmdVector.push_back(cmdString);
 		}
-
 	}
 	else
 	{
@@ -22,10 +21,11 @@ void Scanner::Reader(std::string fileName)
 	}
 };
 
-void Scanner::CmdProcessor()
+void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 {
 	for (size_t i = 0; i < cmdVector.size(); i++)
 	{
+		this->terminate = false;
 		std::string cmd = cmdVector[i];
 		std::istringstream iss(cmd);
 		std::vector<std::string> tokens(std::istream_iterator<std::string>{iss},
@@ -37,43 +37,74 @@ void Scanner::CmdProcessor()
 			case 1 : 
 				if (tokens[0] == "init")
 				{
-					std::cout << "Init Called" << std::endl;
+					os->initOS();
+					std::cout << "init" << std::endl;
 				}
 				else if (tokens[0] == "to")
 				{
-					std::cout << "to called" << std::endl;
+					//std::cout << "to called" << std::endl;
+					os->timeOut();
 				}
 				else
 				{
-					std::cout << "1 tokens, but not init or to, something fukd up" << std::endl;
+					std::cout << "Error 1: Unrecognized Command" << std::endl;
 				}
 				break;
 			case 2 :
 				if (tokens[0] == "de")
 				{
-					std::cout << "cr called" << std::endl;
+					//std::cout << "cr called" << std::endl;
+					std::shared_ptr<PCB> pcb = os->returnProcess(tokens[1]);
+					if (pcb == nullptr)
+					{
+						std::cout << "Error 2: Invalid Process" << std::endl;
+					}
+					else
+					{
+						os->killProcess(pcb);
+					}
 				}
 				else
 				{
-					std::cout << "Error: Unrecognized Command" << std::endl;
+					std::cout << "Error 2: Unrecognized Command" << std::endl;
 				}
 				break;
 			case 3 :
 				if (tokens[0] == "cr")
 				{
-					std::cout << "cr called" << std::endl;
-					if (tokens[1].size() != 1)
+					//std::cout << "cr called" << std::endl;
+					if (tokens[1].size() != 1 || !is_number(tokens[2]))
 					{
-						std::cout << "Error: Process name too long" << std::endl;
+						std::cout << "Error 3: Invalid Process Command" << std::endl;
+					}
+					else
+					{
+						os->create(tokens[1], std::stoi(tokens[2]), 0);
 					}
 				}
 				else if (tokens[0] == "req")
 				{
-					std::cout << "req called" << std::endl;
+					//std::cout << "req called" << std::endl;
+					if (is_number(tokens[2]))
+					{
+						os->request(tokens[1], std::stoi(tokens[2]), os->getRunning());
+					}
+					else
+					{
+						std::cout << "Error 3: Invalid Resource Request" << std::endl;
+					}
 				}
 				else if (tokens[0] == "rel")
 				{
-					std::cout << "rel called" << std::endl;
+					//std::cout << "rel called" << std::endl;
+					if (is_number(tokens[2]))
+					{
+						os->release(tokens[1], std::stoi(tokens[2]), os->getRunning());
+					}
+					else
+					{
+						std::cout << "Error 3: Invalid Resource Request" << std::endl;
+					}
 				}
 				else
 				{
@@ -83,3 +114,10 @@ void Scanner::CmdProcessor()
 		}
 	}
 };
+
+//Function definition comes from https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
+bool is_number(const std::string& s)
+{
+	return !s.empty() && std::find_if(s.begin(),
+		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
