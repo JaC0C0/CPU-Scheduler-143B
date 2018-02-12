@@ -270,6 +270,7 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 		for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : pcb->otherResources)
 		{
 			this->release(rcb->second->rID, pcb->pID);
+			if (pcb->otherResources.size() == 0) { break; }
 		}
 	}
 	this->scheduler();
