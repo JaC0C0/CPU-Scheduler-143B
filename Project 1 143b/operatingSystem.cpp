@@ -1,6 +1,6 @@
 #include "operatingSystem.h"
 
-OperatingSystem::OperatingSystem()
+void OperatingSystem::initOS()
 {
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> 
 		priorityQueue0 = std::make_shared<std::list<std::shared_ptr<PCB>>>(), priorityQueue1 = std::make_shared<std::list<std::shared_ptr<PCB>>>(), priorityQueue2 = std::make_shared<std::list<std::shared_ptr<PCB>>>();
@@ -31,7 +31,7 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 	}
 	else
 	{
-		std::cout << "Resource Blocked" << std::endl;
+		std::cout << "Resource " << rID << " is blocked" << std::endl;
 		pcb->list = resourceMap.at(rID)->waitingList;
 		pcb->status = BLOCKED;
 		resourceMap.at(rID)->waitingList->push_back(pcb);
@@ -170,4 +170,21 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 			this->release(rcb->rID);
 		}
 	}
+}
+
+void OperatingSystem::processState()
+{
+	if (this->isRunning())
+	{
+		std::cout << "Process " << this->getRunning()->pID << " is running" << std::endl;
+	}
+}
+
+bool OperatingSystem::checkTermination()
+{
+	if (this->isRunning() && this->getRunning()->pID == "init")
+	{
+		return true;
+	}
+	return false;
 }

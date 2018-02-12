@@ -8,11 +8,10 @@
 #include "pcb.h"
 #include <iostream>
 #include <vector>
-#include "scanner.h"
 
 class OperatingSystem {
 public:
-	OperatingSystem();
+	void initOS();
 	void create(std::string pID, int priority, int numResources);
 	void request(std::string rID, int quantity, std::shared_ptr<PCB> pcb);
 	void release(std::string rID);
@@ -21,11 +20,11 @@ public:
 	std::shared_ptr<PCB> getRunning();
 	void timeOut();
 	void killProcess(std::shared_ptr<PCB>);
-
+	void processState();
+	bool checkTermination();
 private:
 	std::map<std::string, std::shared_ptr<RCB>> resourceMap;
 	std::vector<std::shared_ptr<std::list<std::shared_ptr<PCB>>>> priorityQueues;
-	Scanner scanner;
 };
 
 #endif //OPERATINGSYSTEM_H
