@@ -20,35 +20,54 @@ void OperatingSystem::create(std::string pID, int priority, int numResources)
 void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB> pcb)
 {
 	//Sets the # of resources the 
-	pcb->numResources = quantity;
-	if (resourceMap.at(rID)->resources.second == quantity)
+	//pcb->numResources = quantity;
+	std::shared_ptr<RCB> rcb = resourceMap.at(rID);
+	//Check if RCB already is requested and add to that RCB request
+	if (this->checkRCB(pcb->otherResources, rID))
 	{
-		resourceMap.at(rID)->resources.second = 0;
+		this->returnRCB(pcb->otherResources, rID)->first += quantity;
 	}
-	else if (resourceMap.at(rID)->resources.second > quantity)
+	else if (rcb->resources.second == quantity)
 	{
-		resourceMap.at(rID)->resources.second -= quantity;
+		rcb->resources.second = 0;
+		pcb->otherResources.push_back(std::make_shared<std::pair<int, std::shared_ptr<RCB>>>(std::make_pair(quantity, rcb)));
+	}
+	else if (rcb->resources.second > quantity)
+	{
+		rcb->resources.second -= quantity;
+		rcb->resources.second = 0;
+		pcb->otherResources.push_back(std::make_shared<std::pair<int, std::shared_ptr<RCB>>>(std::make_pair(quantity, rcb)));
 	}
 	else
 	{
 		std::cout << "Resource " << rID << " is blocked" << std::endl;
 		pcb->list = resourceMap.at(rID)->waitingList;
+		pcb->reqResources = quantity;
 		pcb->status = BLOCKED;
-		resourceMap.at(rID)->waitingList->push_back(pcb);
-
+		rcb->waitingList->push_back(pcb);
 	}
 	this->scheduler();
 };
 
-void OperatingSystem::release(std::string rID)
+void OperatingSystem::release(std::string rID, int quantity)
 {
 	RCB& rcb = *resourceMap.at(rID);
-	rcb.resources.second += this->getRunning()->numResources;
+	//rcb.resources.second += this->getRunning()->numResources;
+	rcb.resources.second += quantity;
+	this->returnRCB(this->getRunning()->otherResources, rID)->first -= quantity;
+	//If process still contains resource
+	if (this->returnRCB(this->getRunning()->otherResources, rID)->first == 0)
+	{
+		for (auto rcb : this->returnRCB(this->getRunning()->otherResources))
+		{
+
+		}
+	}
 	//Check for other waiting processes and if enough resources, request more resources
-	while (!rcb.waitingList->empty() && rcb.resources.first >= rcb.waitingList->front()->numResources)
+	while (!rcb.waitingList->empty() && rcb.resources.first >= rcb.waitingList->front()->reqResources)
 	{
 		//reqResources is the amount of resources requested by the process that is waiting
-		int reqResources = rcb.waitingList->front()->numResources;
+		int reqResources = rcb.waitingList->front()->reqResources;
 
 		std::shared_ptr<PCB> newlyReleased = rcb.waitingList->front();
 		//Remove ptr to PCB from the front of the waitingList to the respective priority queue and reserves respective resources
@@ -129,6 +148,49 @@ std::shared_ptr<PCB> OperatingSystem::getRunning()
 	return nullptr;
 }
 
+std::shared_ptr<PCB> OperatingSystem::returnProcess(std::string pID)
+{
+	for (size_t i = 0; i < priorityQueues.size(); i++)
+	{
+		if (!priorityQueues[i]->empty())
+		{
+			for (std::shared_ptr<PCB> pcb : *priorityQueues[i])
+			{
+				if (pcb->pID == pID)
+				{
+					return pcb;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> OperatingSystem::returnRCB(
+	std::list<std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>>> list, std::string rID)
+{
+	for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : list)
+	{
+		if (rcb->second->rID == rID)
+		{
+			return rcb;
+		}
+	}
+	return nullptr;
+}
+
+bool OperatingSystem::checkRCB(std::list<std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>>> list, std::string rID)
+{
+	for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : list)
+	{
+		if (rcb->second->rID == rID)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void OperatingSystem::timeOut()
 {
 	if (isRunning())
@@ -165,9 +227,9 @@ void OperatingSystem::killProcess(std::shared_ptr<PCB> pcb)
 	}
 	if (!pcb->otherResources.empty())
 	{
-		for (std::shared_ptr<RCB> rcb : pcb->otherResources)
+		for (std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>> rcb : pcb->otherResources)
 		{
-			this->release(rcb->rID);
+			this->release(rcb->second->rID, rcb->first);
 		}
 	}
 }

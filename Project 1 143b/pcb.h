@@ -14,8 +14,8 @@ struct PCB
 	PCB(std::string pID, int priority, int numResources, std::shared_ptr<std::list<std::shared_ptr<PCB>>> list, 
 		std::shared_ptr<PCB> parent);
 	std::string pID;
-	int priority, numResources;
-	std::list<std::shared_ptr<RCB>> otherResources;
+	int priority, reqResources;
+	std::list<std::shared_ptr<std::pair<int, std::shared_ptr<RCB>>>> otherResources;
 	pStatus status;
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> list;
 	//Parent/Child Tree Element

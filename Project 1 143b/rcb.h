@@ -13,7 +13,8 @@ struct RCB
 	RCB(int rID);
 
 	std::string rID;
-	std::pair<int, int> resources;
+	//resources.first are original allocated resource count. resource.second is current resource count
+	std::pair<const int, int> resources;
 	std::shared_ptr<std::list<std::shared_ptr<PCB>>> waitingList;
 };
 
