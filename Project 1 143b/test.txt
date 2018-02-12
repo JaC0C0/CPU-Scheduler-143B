@@ -1,12 +1,119 @@
+cr x 1
+de init
 cr x 2
-cr y 1
-to
+cr y 2
+cr z 3
 cr z 2
-to
 req R1 1
-to
-req R1 1
-de z
+req R2 1
+rel R3 1
 rel R1 1
+req R4 2
+de x
+to
+to
+de y
+cr u 2
+rel R2 2
+rel R1 1
+cr v 2
+req R3 2
+req R4 1
+de y
+de z
+to
+to
+req R1 1
+req R2 2
+rel R3 3
+cr x 1
+cr y 1
+cr q 1
+cr r 1
+to
+req R2 2
+cr z 2
+cr z 4
+req R1 3
+req R2 1
+de k
+de z
+de v
+rel R1 3
+req R2 1
 de x
 de y
+de z
+req R2 2
+req R1 1
+cr q 1
+cr r 1
+to
+req R2 2
+rel R2 1
+rel R1 2
+to
+to
+de x
+de y 
+cr p 1
+to
+de y
+de x
+req R3 2
+to
+req R4 1
+de z
+de u
+de v
+to
+to
+
+init
+cr x 1
+cr a 2
+cr b 3
+cr c 1
+cr d 2
+to
+req R4 1
+req R1 1
+cr y 2
+to
+cr z 3
+rel R5 1
+rel R4 3
+de x
+cr a 1
+de b
+req R1 1
+cr z 2
+to
+cr y 2
+cr a 1
+cr b 2
+de z
+de y
+req R1 1
+req R2 1
+cr c 1
+req R1 2
+req R2 3
+cr x 1
+cr a 2
+cr b 3
+de x
+de init
+req R4 2
+de x
+de y
+de a
+to
+req R2 2
+cr c 0
+cr c 1
+req R1 2
+req R2 3
+de x
+de z
+de init
