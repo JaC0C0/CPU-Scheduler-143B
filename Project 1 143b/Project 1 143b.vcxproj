@@ -151,7 +151,6 @@
     <ClInclude Include="pcb.h" />
     <ClInclude Include="rcb.h" />
     <ClInclude Include="readylist.h" />
-    <ClInclude Include="resourceManager.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="status.h" />
     <ClInclude Include="stdafx.h" />
@@ -163,7 +162,6 @@
     <ClCompile Include="pcb.cpp" />
     <ClCompile Include="rcb.cpp" />
     <ClCompile Include="readylist.cpp" />
-    <ClCompile Include="resourceManager.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

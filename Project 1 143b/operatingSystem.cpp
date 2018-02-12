@@ -2,7 +2,8 @@
 
 OperatingSystem::OperatingSystem()
 {
-	std::shared_ptr<std::list<std::shared_ptr<PCB>>> priorityQueue0, priorityQueue1, priorityQueue2;
+	std::shared_ptr<std::list<std::shared_ptr<PCB>>> 
+		priorityQueue0 = std::make_shared<std::list<std::shared_ptr<PCB>>>(), priorityQueue1 = std::make_shared<std::list<std::shared_ptr<PCB>>>(), priorityQueue2 = std::make_shared<std::list<std::shared_ptr<PCB>>>();
 	this->priorityQueues = { priorityQueue0, priorityQueue1, priorityQueue2 };
 	this->resourceMap = { { "R1", std::make_shared<RCB>(RCB(1)) },{ "R2", std::make_shared<RCB>(RCB(2)) },
 	{ "R3", std::make_shared<RCB>(RCB(3)) },{ "R4", std::make_shared<RCB>(RCB(4)) } };
@@ -109,19 +110,23 @@ bool OperatingSystem::isRunning()
 
 std::shared_ptr<PCB> OperatingSystem::getRunning()
 {
-	for (size_t i = 0; i < priorityQueues.size(); i++)
+	if (this->isRunning())
 	{
-		if (!priorityQueues[i]->empty())
+		for (size_t i = 0; i < priorityQueues.size(); i++)
 		{
-			for (std::shared_ptr<PCB> pcb : *priorityQueues[i])
+			if (!priorityQueues[i]->empty())
 			{
-				if (pcb->status == RUNNING)
+				for (std::shared_ptr<PCB> pcb : *priorityQueues[i])
 				{
-					return pcb;
+					if (pcb->status == RUNNING)
+					{
+						return pcb;
+					}
 				}
 			}
 		}
 	}
+	return nullptr;
 }
 
 void OperatingSystem::timeOut()
