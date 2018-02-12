@@ -23,11 +23,18 @@ void Scanner::Reader(std::string fileName)
 
 void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 {
-	os->processState();
+	std::ofstream textoutput("32422520.txt");
+	os->processState(textoutput);
 	for (size_t i = 0; i < cmdVector.size(); i++)
 	{
+		if (!textoutput.is_open())
+		{
+			std::cout << "Error: Unable to open file for writing" << std::endl;
+			return;
+		}
 		this->terminate = false;
 		std::string cmd = cmdVector[i];
+		//Code utilized from https://stackoverflow.com/questions/236129/the-most-elegant-way-to-iterate-the-words-of-a-string
 		std::istringstream iss(cmd);
 		std::vector<std::string> tokens(std::istream_iterator<std::string>{iss},
 			std::istream_iterator<std::string>());
@@ -40,10 +47,10 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				{
 					os->initOS();
 					std::cout << "init" << std::endl;
+					textoutput << std::endl;
 				}
 				else if (tokens[0] == "to")
 				{
-					//std::cout << "to called" << std::endl;
 					os->timeOut();
 				}
 				else
@@ -54,11 +61,11 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 			case 2 :
 				if (tokens[0] == "de")
 				{
-					//std::cout << "cr called" << std::endl;
 					std::shared_ptr<PCB> pcb = os->returnProcess(tokens[1]);
-					if (pcb == nullptr)
+					if (pcb == nullptr || tokens[1] == "init")
 					{
-						std::cout << "Error 2: Invalid Process" << std::endl;
+						std::cout << "Error 2: Invalid operation on process" << std::endl;
+						textoutput << "error ";
 					}
 					else
 					{
@@ -68,15 +75,17 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				else
 				{
 					std::cout << "Error 2: Unrecognized Command" << std::endl;
+					textoutput << "error ";
 				}
 				break;
 			case 3 :
 				if (tokens[0] == "cr")
 				{
-					//std::cout << "cr called" << std::endl;
-					if (tokens[1].size() != 1 || !this->is_number(tokens[2]))
+					if (tokens[1].size() != 1 || !this->is_number(tokens[2]) || os->returnProcess(tokens[1]) != nullptr ||
+						std::stoi(tokens[2]) > 2 || std::stoi(tokens[2]) < 0)
 					{
 						std::cout << "Error 3: Invalid Process Command" << std::endl;
+						textoutput << "error ";
 					}
 					else
 					{
@@ -85,7 +94,6 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				}
 				else if (tokens[0] == "req")
 				{
-					//std::cout << "req called" << std::endl;
 					if (is_number(tokens[2]))
 					{
 						os->request(tokens[1], std::stoi(tokens[2]), os->getRunning());
@@ -93,28 +101,32 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 					else
 					{
 						std::cout << "Error 3: Invalid Resource Request" << std::endl;
+						textoutput << "error ";
 					}
 				}
 				else if (tokens[0] == "rel")
 				{
-					//std::cout << "rel called" << std::endl;
-					if (is_number(tokens[2]))
+					std::vector<std::string> resourceArray = { "R1", "R2", "R3", "R4" };
+					if (is_number(tokens[2]) && std::find(resourceArray.begin(), resourceArray.end(), tokens[1]) != resourceArray.end() || std::stoi(tokens[2]) > tokens[1][1])
 					{
 						os->release(tokens[1], std::stoi(tokens[2]));
 					}
 					else
 					{
 						std::cout << "Error 3: Invalid Resource Request" << std::endl;
+						textoutput << "error ";
 					}
 				}
 				else
 				{
 					std::cout << "Error 3: Invalid Command" << std::endl;
+					textoutput << "error ";
 				}
 				break;
 		}
-		os->processState();
+		os->processState(textoutput);
 	}
+	textoutput.close();
 };
 
 //Function definition comes from https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
