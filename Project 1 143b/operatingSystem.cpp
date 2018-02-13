@@ -28,6 +28,7 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 	if (this->checkRCB(pcb->otherResources, rID))
 	{
 		this->returnRCB(pcb->otherResources, rID)->first += quantity;
+		this->returnRCB(pcb->otherResources, rID)->second->resources.second -= quantity;
 	}
 	//If resources requested == resources available
 	else if (rcb->resources.second == quantity)
@@ -49,7 +50,7 @@ void OperatingSystem::request(std::string rID, int quantity, std::shared_ptr<PCB
 		std::cout << "Resource " << rID << " is blocked" << std::endl;
 		pcb->list = resourceMap.at(rID)->waitingList;
 		priorityQueues[pcb->priority]->remove(pcb);
-		pcb->reqResources = quantity;
+		pcb->reqResources += quantity;
 		pcb->status = BLOCKED;
 		rcb->waitingList->push_back(pcb);
 	}
@@ -209,6 +210,17 @@ std::shared_ptr<PCB> OperatingSystem::returnProcess(std::string pID)
 				{
 					return pcb;
 				}
+			}
+		}
+	}
+	for (std::pair<std::string, std::shared_ptr<RCB>> rcbPair : this->resourceMap)
+	{
+		std::shared_ptr<RCB> rcb = rcbPair.second;
+		for (std::shared_ptr<PCB> pcb : *rcb->waitingList)
+		{
+			if (pcb->pID == pID)
+			{
+				return pcb;
 			}
 		}
 	}

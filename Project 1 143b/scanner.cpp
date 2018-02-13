@@ -94,20 +94,22 @@ void Scanner::CmdProcessor(std::shared_ptr<OperatingSystem> os)
 				}
 				else if (tokens[0] == "req")
 				{
-					if (is_number(tokens[2]))
-					{
-						os->request(tokens[1], std::stoi(tokens[2]), os->getRunning());
-					}
-					else
+					if (!is_number(tokens[2]) || std::stoi(tokens[2]) > tokens[1][1] - '0')
 					{
 						std::cout << "Error 3: Invalid Resource Request" << std::endl;
 						textoutput << "error ";
+					}
+					else
+					{
+						std::cout << os->getRunning()->pID << std::endl;
+						os->request(tokens[1], std::stoi(tokens[2]), os->getRunning());
 					}
 				}
 				else if (tokens[0] == "rel")
 				{
 					std::vector<std::string> resourceArray = { "R1", "R2", "R3", "R4" };
-					if (is_number(tokens[2]) && std::find(resourceArray.begin(), resourceArray.end(), tokens[1]) != resourceArray.end() || std::stoi(tokens[2]) > tokens[1][1])
+					if (is_number(tokens[2]) && std::find(resourceArray.begin(), resourceArray.end(), tokens[1]) != resourceArray.end() ||
+						!std::stoi(tokens[2]) > tokens[1][1] - '0')
 					{
 						os->release(tokens[1], std::stoi(tokens[2]));
 					}
